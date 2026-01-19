@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Quản lý danh sách nhân viên - Vòng quay may mắn</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #0f172a, #1f2937);
+            color: #e5e7eb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(15,23,42,0.92);
+            border-radius: 18px;
+            padding: 20px 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            border: 1px solid rgba(148,163,184,0.6);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 18px;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        input, textarea {
+            background: #020617;
+            border-radius: 8px;
+            border: 1px solid rgba(148,163,184,0.7);
+            padding: 6px 8px;
+            color: #f9fafb;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #facc15;
+            box-shadow: 0 0 0 1px rgba(250,204,21,0.6);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f97316, #facc15);
+            color: #111827;
+            white-space: nowrap;
+            box-shadow: 0 6px 15px rgba(248,250,252,0.25);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow: 0 10px 25px rgba(248,250,252,0.35);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #0ea5e9, #22c55e);
+            color: #022c22;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            color: #111827;
+        }
+
+        .note {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            border-bottom: 1px solid rgba(51,65,85,0.9);
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(15,23,42,0.9);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(15,23,42,0.7);
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(15,23,42,0.9);
+        }
+
+        .code-cell {
+            font-weight: 600;
+            color: #facc15;
+        }
+
+        .actions-cell button {
+            padding: 4px 10px;
+            font-size: 0.75rem;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(15,118,110,0.3);
+            border: 1px solid rgba(34,197,94,0.6);
+            color: #bbf7d0;
+        }
+
+        @media (max-width: 700px) {
+            .flex-row {
+                flex-direction: column;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        .search-highlight {
+            background: rgba(250,204,21,0.25);
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Quản lý danh sách nhân viên</h1>
+    <div class="subtitle">
+        Dữ liệu được lưu vào <strong>localStorage (employeesData)</strong> và được vòng quay sử dụng.
+    </div>
+
+    <!-- Thêm từng nhân viên -->
+    <div class="flex-col" style="margin-bottom: 10px;">
+        <div class="note">Thêm từng nhân viên:</div>
+        <div class="flex-row">
+            <input id="empCodeInput" placeholder="Mã NV (VD: NV001)" />
+            <input id="empNameInput" placeholder="Họ tên (VD: Nguyễn Văn A)" />
+            <input id="empDeptInput" placeholder="Bộ phận (VD: IT)" />
+            <button id="addEmpBtn" class="btn">Thêm</button>
+        </div>
+        <div class="note">Gợi ý: avatar đặt tên trùng mã (NV001.jpg / NV001.png...) trong thư mục <code>avatars</code>.</div>
+    </div>
+
+    <!-- Import nhiều nhân viên -->
+    <div class="flex-col">
+        <div class="note">Import nhanh (mỗi dòng một nhân viên, dạng sau):</div>
+        <div class="note" style="margin-bottom:4px;">
+            <code>NV001 - Nguyễn Văn A - IT</code> hoặc <code>NV001;Nguyễn Văn A;IT</code>
+        </div>
+        <textarea id="empBulkInput"
+                  placeholder="V0990938 - Lê Văn A - IT&#10;V0990939 - Trần Thị B - QC"></textarea>
+        <div class="flex-row" style="margin-top:8px;">
+            <button id="importEmpBtn" class="btn btn-secondary">Import danh sách</button>
+            <button id="exportEmpBtn" class="btn">Xuất ra dạng text</button>
+            <button id="clearAllBtn" class="btn btn-danger">Xóa toàn bộ danh sách</button>
+        </div>
+    </div>
+
+    <!-- Thanh công cụ & thông tin -->
+    <div class="toolbar">
+        <div id="totalInfo" class="chip">Tổng: 0 nhân viên</div>
+        <div class="note">
+            Sau khi chỉnh sửa, chỉ cần mở lại trang <strong>vòng quay</strong> là dùng được ngay.
+        </div>
+    </div>
+
+    <!-- Thanh tìm kiếm -->
+    <div class="search-wrap" style="margin-top:16px; margin-bottom:10px; display:flex; gap:10px;">
+        <input id="searchInput"
+            placeholder="Tìm theo mã hoặc họ tên hoặc bộ phận..."
+            style="flex:1;"/>
+        <button id="clearSearchBtn" class="btn btn-secondary" style="padding:6px 14px;">Xóa tìm</button>
+    </div>
+
+    <!-- Bảng danh sách -->
+    <div style="margin-top: 14px; max-height: 380px; overflow: auto; border-radius: 10px; border: 1px solid rgba(51,65,85,0.9);">
+        <table>
+            <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th style="width: 130px;">Mã NV</th>
+                <th>Họ tên</th>
+                <th style="width: 120px;">Bộ phận</th>
+                <th style="width: 90px;">Thao tác</th>
+            </tr>
+            </thead>
+            <tbody id="empTableBody">
+            <!-- JS render -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // ====== CẤU HÌNH CHUNG ======
+    const STORAGE_KEY = "employeesData";
+    const SYNC_FLAG_KEY = "syncNeeded";
+
+    let employees = [];
+
+    // ====== DOM ELEMENTS ======
+    const empCodeInput   = document.getElementById("empCodeInput");
+    const empNameInput   = document.getElementById("empNameInput");
+    const empDeptInput   = document.getElementById("empDeptInput");
+    const addEmpBtn      = document.getElementById("addEmpBtn");
+    const empBulkInput   = document.getElementById("empBulkInput");
+    const importEmpBtn   = document.getElementById("importEmpBtn");
+    const exportEmpBtn   = document.getElementById("exportEmpBtn");
+    const clearAllBtn    = document.getElementById("clearAllBtn");
+    const empTableBody   = document.getElementById("empTableBody");
+    const totalInfo      = document.getElementById("totalInfo");
+    const searchInput    = document.getElementById("searchInput");
+    const clearSearchBtn = document.getElementById("clearSearchBtn");
+
+    // ====== STORAGE ======
+    function loadEmployeesFromStorage() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                // Backward compatible: nếu dữ liệu cũ chưa có dept
+                employees = parsed.map(e => ({
+                    code: (e.code || "").toString(),
+                    name: (e.name || "").toString(),
+                    dept: (e.dept || "").toString()
+                }));
+            }
+        } catch (e) {
+            console.error("Lỗi parse employeesData:", e);
+            showError("Lỗi đọc dữ liệu từ localStorage");
+        }
+    }
+
+    function saveEmployeesToStorage() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(employees));
+            // Đánh dấu cần đồng bộ
+            localStorage.setItem(SYNC_FLAG_KEY, 'true');
+            // Lưu backup cho chức năng Clear
+            localStorage.setItem("employeesDataOriginal", JSON.stringify(employees));
+
+            showSuccess("Đã lưu thành công! Dữ liệu sẽ tự động cập nhật trên trang vòng quay.");
+        } catch (e) {
+            console.error("Lỗi save employeesData:", e);
+            showError("Lỗi lưu dữ liệu vào localStorage");
+        }
+    }
+
+    // ====== RENDER BẢNG ======
+    function renderTable(filterKeyword = '') {
+        empTableBody.innerHTML = "";
+
+        const filteredEmployees = filterKeyword
+            ? employees.filter(emp => {
+                const k = filterKeyword;
+                return (emp.code || "").toLowerCase().includes(k) ||
+                       (emp.name || "").toLowerCase().includes(k) ||
+                       (emp.dept || "").toLowerCase().includes(k);
+              })
+            : employees;
+
+        if (filteredEmployees.length === 0) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td colspan="5" style="text-align: center; padding: 20px; opacity: 0.7;">
+                    ${filterKeyword ? 'Không tìm thấy kết quả phù hợp' : 'Danh sách trống'}
+                </td>
+            `;
+            empTableBody.appendChild(tr);
+        } else {
+            filteredEmployees.forEach((emp, index) => {
+                const tr = document.createElement("tr");
+
+                // Highlight nếu đang tìm kiếm
+                if (filterKeyword) {
+                    tr.classList.add("search-highlight");
+                }
+
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="code-cell">${escapeHtml(emp.code)}</td>
+                    <td>${escapeHtml(emp.name)}</td>
+                    <td>${escapeHtml(emp.dept || '')}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-danger" style="padding: 3px 8px; font-size: 0.75rem;"
+                                onclick="deleteEmployee('${escapeHtml(emp.code)}')">
+                            Xóa
+                        </button>
+                    </td>
+                `;
+                empTableBody.appendChild(tr);
+            });
+        }
+
+        totalInfo.textContent = filterKeyword
+            ? `Tìm thấy: ${filteredEmployees.length}/${employees.length} nhân viên`
+            : `Tổng: ${employees.length} nhân viên`;
+    }
+
+    // ====== UTILITY FUNCTIONS ======
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showSuccess(message) {
+        showNotification(message, 'success');
+    }
+
+    function showError(message) {
+        showNotification(message, 'error');
+    }
+
+    function showNotification(message, type = 'info') {
+        // Xóa thông báo cũ
+        const oldNotification = document.querySelector('.notification');
+        if (oldNotification) oldNotification.remove();
+
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease-out;
+            color: white;
+            font-weight: bold;
+            ${type === 'success' ? 'background: linear-gradient(135deg, #22c55e, #10b981);' : ''}
+            ${type === 'error' ? 'background: linear-gradient(135deg, #ef4444, #dc2626);' : ''}
+            ${type === 'info' ? 'background: linear-gradient(135deg, #3b82f6, #1d4ed8);' : ''}
+        `;
+
+        notification.innerHTML = `
+            <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'} ${message}</span>
+            <button onclick="this.parentElement.remove()" style="
+                background: none;
+                border: none;
+                color: white;
+                cursor: pointer;
+                font-size: 18px;
+                margin-left: 10px;
+            ">×</button>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Tự động xóa sau 5 giây
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+
+    // ====== CRUD OPERATIONS ======
+    function addOneEmployee(code, name, dept) {
+        code = (code || "").trim().toUpperCase();
+        name = (name || "").trim();
+        dept = (dept || "").trim();
+
+        if (!code || !name || !dept) {
+            showError("Vui lòng nhập đầy đủ Mã nhân viên, Họ tên và Bộ phận.");
+            return;
+        }
+
+        // Kiểm tra định dạng mã NV
+        if (!/^[A-Z0-9]+$/.test(code)) {
+            showError("Mã nhân viên chỉ được chứa chữ in hoa và số (không dấu, không khoảng trắng)");
+            return;
+        }
+
+        const existed = employees.some(e => e.code === code);
+        if (existed) {
+            showError(`Mã nhân viên "${code}" đã tồn tại.`);
+            return;
+        }
+
+        employees.push({ code, name, dept });
+        saveEmployeesToStorage();
+        renderTable();
+
+        // Clear input
+        empCodeInput.value = "";
+        empNameInput.value = "";
+        empDeptInput.value = "";
+        empCodeInput.focus();
+    }
+
+    function deleteEmployee(code) {
+        if (!confirm(`Bạn có chắc muốn xóa nhân viên "${code}"?`)) {
+            return;
+        }
+
+        const index = employees.findIndex(emp => emp.code === code);
+        if (index !== -1) {
+            employees.splice(index, 1);
+            saveEmployeesToStorage();
+            renderTable(searchInput.value.trim().toLowerCase());
+            showSuccess(`Đã xóa nhân viên ${code}`);
+        }
+    }
+
+    function importEmployeesFromText(text) {
+        const lines = text.split("\n")
+            .map(l => l.trim())
+            .filter(l => l.length > 0);
+
+        if (lines.length === 0) {
+            showError("Không có dữ liệu để import.");
+            return;
+        }
+
+        let addedCount = 0;
+        let duplicates = [];
+        const existingCodes = new Set(employees.map(e => e.code));
+
+        lines.forEach((line, index) => {
+            let code = "";
+            let name = "";
+            let dept = "";
+
+            // Chuẩn hóa tách theo các định dạng phổ biến
+            let parts = [];
+            if (line.includes(" - ")) {
+                parts = line.split(" - ").map(s => s.trim());
+            } else if (line.includes(";")) {
+                parts = line.split(";").map(s => s.trim());
+            } else if (line.includes("\t")) {
+                parts = line.split("\t").map(s => s.trim());
+            } else {
+                // fallback: tách theo khoảng trắng (ít khuyến nghị)
+                parts = line.split(/\s+/).map(s => s.trim());
+            }
+
+            // Mapping: code / name / dept
+            code = (parts[0] || "").trim();
+            name = (parts[1] || "").trim();
+            dept = (parts.slice(2).join(" ") || "").trim(); // cho phép dept có khoảng trắng
+
+            code = code.toUpperCase();
+
+            if (!code) {
+                showError(`Dòng ${index + 1}: Thiếu mã nhân viên`);
+                return;
+            }
+
+            if (!name || !dept) {
+                showError(`Dòng ${index + 1}: Thiếu họ tên hoặc bộ phận. Ví dụ: V0990938 - Lê Văn A - IT`);
+                return;
+            }
+
+            if (existingCodes.has(code)) {
+                duplicates.push(code);
+                return;
+            }
+
+            employees.push({ code, name, dept });
+            existingCodes.add(code);
+            addedCount++;
+        });
+
+        if (addedCount > 0) {
+            saveEmployeesToStorage();
+            renderTable();
+
+            let message = `Đã import thêm ${addedCount} nhân viên.`;
+            if (duplicates.length > 0) {
+                message += ` Bỏ qua ${duplicates.length} mã trùng: ${duplicates.join(", ")}`;
+            }
+            showSuccess(message);
+        } else {
+            showError("Không có nhân viên nào mới được import (có thể do trùng mã).");
+        }
+    }
+
+    function exportEmployeesToText() {
+        if (!employees.length) {
+            showError("Danh sách đang trống.");
+            return;
+        }
+
+        // Format đẹp cho copy
+        const lines = employees.map(e => `${e.code} - ${e.name} - ${e.dept}`);
+        const formattedText = lines.join("\n");
+
+        // Copy vào clipboard
+        navigator.clipboard.writeText(formattedText).then(() => {
+            // Hiển thị trong textarea
+            empBulkInput.value = formattedText;
+            showSuccess(`Đã copy ${employees.length} nhân viên vào clipboard!`);
+        }).catch(() => {
+            // Fallback nếu clipboard không hoạt động
+            empBulkInput.value = formattedText;
+            empBulkInput.select();
+            showSuccess(`Đã xuất ${employees.length} nhân viên vào ô phía trên. Nhấn Ctrl+C để copy.`);
+        });
+    }
+
+    function clearAllEmployees() {
+        if (!employees.length) {
+            showError("Danh sách đã trống.");
+            return;
+        }
+
+        if (confirm(`Bạn có CHẮC CHẮN muốn xóa TOÀN BỘ ${employees.length} nhân viên?`)) {
+            employees = [];
+            saveEmployeesToStorage();
+            renderTable();
+            showSuccess("Đã xóa toàn bộ danh sách nhân viên.");
+        }
+    }
+
+    // ====== TÌM KIẾM ======
+    function filterEmployees(keyword) {
+        renderTable(keyword.trim().toLowerCase());
+    }
+
+    // ====== EVENT LISTENERS ======
+    addEmpBtn.addEventListener("click", () => {
+        addOneEmployee(empCodeInput.value, empNameInput.value, empDeptInput.value);
+    });
+
+    empDeptInput.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+            addOneEmployee(empCodeInput.value, empNameInput.value, empDeptInput.value);
+        }
+    });
+
+    importEmpBtn.addEventListener("click", () => {
+        importEmployeesFromText(empBulkInput.value);
+    });
+
+    exportEmpBtn.addEventListener("click", exportEmployeesToText);
+
+    clearAllBtn.addEventListener("click", clearAllEmployees);
+
+    searchInput.addEventListener("input", (e) => {
+        filterEmployees(e.target.value);
+    });
+
+    clearSearchBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        filterEmployees("");
+        searchInput.focus();
+    });
+
+    // Thêm sự kiện Enter trong search
+    searchInput.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+            filterEmployees(searchInput.value);
+        }
+    });
+
+    // ====== KHỞI TẠO ======
+    document.addEventListener('DOMContentLoaded', () => {
+        loadEmployeesFromStorage();
+        renderTable();
+
+        // Auto-focus vào ô tìm kiếm
+        searchInput.focus();
+
+        // Hiển thị hướng dẫn nếu danh sách trống
+        if (employees.length === 0) {
+            showNotification("Nhập nhân viên để bắt đầu. Có thể import từ Excel bằng cách copy/paste.", 'info');
+        }
+    });
+
+    // Thêm animation CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .search-highlight {
+            animation: highlightPulse 0.5s ease;
+        }
+
+        @keyframes highlightPulse {
+            0% { background-color: rgba(250, 204, 21, 0); }
+            50% { background-color: rgba(250, 204, 21, 0.3); }
+            100% { background-color: rgba(250, 204, 21, 0.1); }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+</body>
+</html>

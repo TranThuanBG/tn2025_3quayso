@@ -1,0 +1,2383 @@
+﻿﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Liên Hoan Cuối Năm - Vòng Quay May Mắn</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-image: url("./Vongquaymayman/background.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #e9edf5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ====== HOÀNH TRÁNG HƠN: SPOTLIGHT + AURORA LAYER (chỉ thêm) ====== */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -60px;
+      pointer-events: none;
+      z-index: -2;
+      background:
+        radial-gradient(900px 420px at 20% 20%, rgba(255, 75, 214, .18), transparent 65%),
+        radial-gradient(900px 420px at 80% 25%, rgba(83, 229, 255, .16), transparent 65%),
+        radial-gradient(900px 520px at 50% 95%, rgba(250, 204, 21, .14), transparent 70%),
+        linear-gradient(135deg, rgba(2, 6, 23, .45), rgba(2, 6, 23, .10));
+      filter: blur(0.2px);
+    }
+
+    .spotlight-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .spotlight {
+      position: absolute;
+      top: -40vh;
+      width: 42vw;
+      max-width: 620px;
+      height: 140vh;
+      transform: rotate(18deg);
+      opacity: .40;
+      filter: blur(0.4px);
+      mix-blend-mode: screen;
+      background: linear-gradient(to bottom,
+          rgba(255, 255, 255, .0),
+          rgba(255, 255, 255, .10),
+          rgba(255, 255, 255, .0));
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 70%, transparent 100%);
+      animation: beamMove 10s ease-in-out infinite;
+    }
+
+    .spotlight.beam2 {
+      transform: rotate(-16deg);
+      opacity: .28;
+      animation-duration: 12s;
+      animation-delay: -3s;
+    }
+
+    .spotlight.beam3 {
+      transform: rotate(10deg);
+      opacity: .20;
+      animation-duration: 14s;
+      animation-delay: -6s;
+    }
+
+    @keyframes beamMove {
+      0% {
+        left: -20vw;
+      }
+
+      50% {
+        left: 78vw;
+      }
+
+      100% {
+        left: -20vw;
+      }
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(236, 227, 190, 0.28), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(156, 209, 232, 0.35), transparent 55%),
+        rgba(0, 0, 0, 0.18);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1890px;
+      padding: 20px 20px 26px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* ===== HEADER (giữ nguyên + nâng cấp hoành tráng hơn) ===== */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 28px 22px;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.78);
+      box-shadow:
+        0 0 0 5px rgba(148, 163, 184, 0.4),
+        0 16px 32px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+
+      position: relative;
+      overflow: hidden;
+
+      transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    header:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow:
+        0 0 0 5px rgba(148, 163, 184, 0.45),
+        0 20px 40px rgba(0, 0, 0, .72);
+    }
+
+    /* ✅ Sparkle chạy nhẹ trong header */
+    header .sparkle-in {
+      position: absolute;
+      inset: -40px;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .35;
+      background:
+        radial-gradient(circle, rgba(255, 255, 255, .16) 0 2px, transparent 3px) 0 0/36px 36px,
+        radial-gradient(circle, rgba(56, 189, 248, .15) 0 2px, transparent 3px) 12px 18px/44px 44px;
+      mask: linear-gradient(#000, transparent 75%);
+      animation: sparkleMove 9s linear infinite;
+    }
+
+    @keyframes sparkleMove {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+
+      to {
+        transform: translate3d(60px, -40px, 0);
+      }
+    }
+
+    /* ✅ LED RGB chạy theo viền – trái ➜ phải liên tục */
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 1px;
+      /* độ dày viền */
+
+      background:
+        linear-gradient(90deg,
+          red,
+          orange,
+          yellow,
+          lime,
+          cyan,
+          blue,
+          magenta,
+          red);
+      background-size: 300% 100%;
+      animation: ledBorderFlow 1.25s linear infinite;
+
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+
+      pointer-events: none;
+      z-index: 1;
+
+      filter:
+        drop-shadow(0 0 6px rgba(255, 255, 255, .30)) drop-shadow(0 0 16px rgba(56, 189, 248, .28)) drop-shadow(0 0 14px rgba(250, 204, 21, .22));
+    }
+
+    /* ✅ thêm “pulse glow” cho viền LED (hoành tráng hơn) */
+    header::after {
+      animation:
+        ledBorderFlow 1.25s linear infinite,
+        borderPulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes borderPulse {
+
+      0%,
+      100% {
+        filter:
+          drop-shadow(0 0 6px rgba(255, 255, 255, .26)) drop-shadow(0 0 14px rgba(56, 189, 248, .22)) drop-shadow(0 0 12px rgba(250, 204, 21, .18));
+      }
+
+      50% {
+        filter:
+          drop-shadow(0 0 10px rgba(255, 255, 255, .36)) drop-shadow(0 0 22px rgba(56, 189, 248, .30)) drop-shadow(0 0 20px rgba(250, 204, 21, .26));
+      }
+    }
+
+    /* nội dung header nổi trên LED */
+    header>* {
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes ledBorderFlow {
+      from {
+        background-position: 0% 0;
+      }
+
+      to {
+        background-position: 300% 0;
+      }
+    }
+
+    .header-main {
+      text-align: center;
+    }
+
+    .header-main h1 {
+      font-size: 2.1rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 4px;
+      background: linear-gradient(90deg, #facc15, #fb923c, #38bdf8);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .header-main p {
+      font-size: 1rem;
+      color: rgba(241, 245, 249, 0.9);
+    }
+
+    .header-logos {
+      margin-top: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .header-logo-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 6px 18px;
+      min-width: 140px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .header-logo-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.5);
+    }
+
+    .header-logo-img {
+      max-height: 34px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* ✅ Marquee (ticker) trong header (chỉ thêm) */
+    .marquee {
+      width: min(980px, 92%);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, .35);
+      background: rgba(2, 6, 23, .35);
+      overflow: hidden;
+      padding: 8px 0;
+      margin-top: 6px;
+    }
+
+    .marquee-track {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: marquee 14s linear infinite;
+      font-weight: 800;
+      letter-spacing: .5px;
+      color: rgba(226, 232, 240, .92);
+      text-shadow: 0 0 12px rgba(250, 204, 21, .25);
+    }
+
+    @keyframes marquee {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 14px 14px 18px;
+      }
+
+      .header-main h1 {
+        font-size: 1.6rem;
+        letter-spacing: 3px;
+      }
+
+      .header-logo-card {
+        min-width: 110px;
+        height: 50px;
+        padding: 4px 12px;
+      }
+
+      .header-logo-img {
+        max-height: 30px;
+      }
+
+      .marquee-track {
+        animation-duration: 18s;
+      }
+    }
+
+    .sub-text {
+      font-size: 0.82rem;
+      color: rgba(226, 232, 240, 0.8);
+    }
+
+    /* ✅ Thu nhỏ trái + giữa, tăng phải */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr 1.2fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .card {
+      border-radius: 22px;
+      padding: 16px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: linear-gradient(145deg,
+          rgba(255, 255, 255, 0.14),
+          rgba(15, 23, 42, 0.88));
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ✅ LED chạy 1 đoạn quanh viền CARD (giữ nguyên của bạn) */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 28px;
+      padding: 3px;
+      background: conic-gradient(from 0deg,
+          rgba(0, 0, 0, 0) 0deg,
+          rgba(0, 0, 0, 0) 320deg,
+          rgba(250, 204, 21, 1) 320deg,
+          rgba(249, 115, 22, 1) 332deg,
+          rgba(56, 189, 248, 1) 340deg,
+          rgba(56, 189, 248, 0.35) 348deg,
+          rgba(0, 0, 0, 0) 360deg);
+      animation: ledRun 1.8s linear infinite;
+      z-index: 0;
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.45)) drop-shadow(0 0 18px rgba(56, 189, 248, 0.28));
+    }
+
+    .card>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes ledRun {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ✅ Compact cho 2 card (cơ cấu giải + vòng quay) */
+    .card.compact {
+      padding: 12px 14px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #fde68a;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f97316, #facc15);
+      color: #111827;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 25px rgba(250, 204, 21, 0.45);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 14px 35px rgba(250, 204, 21, 0.7);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.8);
+    }
+
+    .btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #022c22;
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5);
+    }
+
+    .award-btn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 300;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 197, 94, 0.9);
+      cursor: pointer;
+      background: radial-gradient(circle at top, #22c55e, #15803d);
+      color: #ecfdf5;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .award-btn:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    .prize-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0 10px;
+    }
+
+    .prize-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .prize-btn span.count {
+      font-size: 0.7rem;
+      opacity: 0.85;
+    }
+
+    .prize-btn.active {
+      background: linear-gradient(135deg, #f97316, #facc15);
+      color: #111827;
+      border-color: rgba(250, 204, 21, 0.95);
+      box-shadow: 0 0 18px rgba(250, 204, 21, 0.95);
+    }
+
+    .prize-config-panel {
+      margin-top: 4px;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      backdrop-filter: blur(8px);
+    }
+
+    .prize-config-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+    }
+
+    .prize-config-row:last-child {
+      margin-bottom: 2px;
+    }
+
+    .prize-config-row label {
+      min-width: 90px;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .prize-stats {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .prize-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .prize-pill.total {
+      border-color: rgba(59, 130, 246, 0.8);
+      background: rgba(37, 99, 235, 0.15);
+      color: #bfdbfe;
+    }
+
+    .prize-pill.used {
+      border-color: rgba(248, 113, 113, 0.9);
+      background: rgba(153, 27, 27, 0.3);
+      color: #fecaca;
+    }
+
+    .prize-pill.remaining {
+      border-color: rgba(34, 197, 94, 0.9);
+      background: rgba(22, 163, 74, 0.35);
+      color: #bbf7d0;
+    }
+
+    .prize-config-row input[type="number"] {
+      width: 70px;
+      padding: 3px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: #020617;
+      color: #f9fafb;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    .prize-config-row input[type="number"]:focus {
+      border-color: #facc15;
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.4);
+    }
+
+    .current-prize-label {
+      font-size: 0.86rem;
+      margin-top: 8px;
+      font-weight: 600;
+      color: #fde68a;
+    }
+
+    .spin-wrapper {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* ✅ Thu nhỏ vòng quay */
+    .spin-box {
+      width: 100%;
+      max-width: 330px;
+      height: 180px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(252, 211, 77, 0.4), transparent 60%),
+        radial-gradient(circle at 80% 100%, rgba(96, 165, 250, 0.4), transparent 60%),
+        linear-gradient(135deg, #020617, #020617);
+      border: 3px solid #facc15;
+      box-shadow:
+        0 0 0 2px rgba(15, 23, 42, 0.9),
+        0 0 40px rgba(252, 211, 77, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spin-box::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 18px;
+      border: 1px dashed rgba(248, 250, 252, 0.5);
+      opacity: 0.9;
+    }
+
+    .spin-label {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #a5b4fc;
+      margin-bottom: 6px;
+      z-index: 1;
+    }
+
+    .spin-code {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #facc15;
+      z-index: 1;
+      text-shadow: 0 0 12px rgba(250, 204, 21, 0.9);
+    }
+
+    .spin-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 4px;
+      z-index: 1;
+      color: #e5e7eb;
+    }
+
+    .spin-box.spinning {
+      animation: spinGlow 0.35s ease-in-out infinite alternate;
+    }
+
+    @keyframes spinGlow {
+      from {
+        box-shadow: 0 0 25px rgba(252, 211, 77, 0.7);
+        transform: scale(1);
+      }
+
+      to {
+        box-shadow: 0 0 45px rgba(96, 165, 250, 1);
+        transform: scale(1.03);
+      }
+    }
+
+    .current-winner-box {
+      margin-top: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      padding: 8px 10px;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.9), rgba(15, 23, 42, 0.95));
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .current-winner-box .title {
+      font-size: 0.78rem;
+      opacity: 0.85;
+      margin-bottom: 4px;
+    }
+
+    .current-winner-code {
+      font-weight: 600;
+      color: #38bdf8;
+    }
+
+    .current-winner-name {
+      font-weight: 700;
+      color: #fde68a;
+    }
+
+    .table-card {
+      border-radius: 18px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.6);
+      font-size: 0.7rem;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      gap: 8px;
+    }
+
+    .table-header-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #fde68a;
+    }
+
+    .badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(30, 64, 175, 0.65);
+      border: 1px solid rgba(129, 140, 248, 0.9);
+      font-size: 0.6rem;
+      color: #e5e7eb;
+    }
+
+    .search-input {
+      background: #020617;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      padding: 4px 10px;
+      color: #f9fafb;
+      font-size: 0.8rem;
+      outline: none;
+      min-width: 150px;
+    }
+
+    .search-input:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.5);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid rgba(51, 65, 85, 0.9);
+      padding: 4px 6px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(15, 23, 42, 0.98);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.82);
+    }
+
+    td.prize-cell {
+      font-weight: 700;
+      color: #facc15;
+    }
+
+    .prize-cell {
+      font-weight: 600;
+      color: #facc15;
+    }
+
+    .footer {
+      margin-top: 18px;
+      padding: 18px 25px;
+      text-align: center;
+      color: #0f172a;
+      font-weight: 700;
+      border-top: 2px solid rgba(234, 179, 8, 0.9);
+      background: linear-gradient(90deg, #facc15, #f97316, #fb56ed);
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      width: 100%;
+    }
+
+    .footer img {
+      height: 80px;
+      width: 100px;
+      border-radius: 12px;
+      object-fit: contain;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+      animation: footerGlow 3s ease-in-out infinite alternate;
+      background: #fff;
+    }
+
+    @keyframes footerGlow {
+      from {
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.4);
+      }
+
+      to {
+        box-shadow: 0 0 32px rgba(255, 255, 255, 1);
+      }
+    }
+
+    .winner-popup {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 250;
+    }
+
+    .winner-popup.show {
+      display: flex;
+    }
+
+    .popup-card {
+      background: radial-gradient(circle at top, #1e293b, #020617);
+      border-radius: 24px;
+      padding: 24px 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+      text-align: center;
+      border: 2px solid rgba(250, 204, 21, 0.9);
+      max-width: 320px;
+      width: 90%;
+      color: #f9fafb;
+    }
+
+    .popup-title {
+      font-size: 1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #facc15;
+      margin-bottom: 12px;
+    }
+
+    .crown-frame {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      border: 4px solid #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 20%, #fef9c3, #92400e);
+      overflow: hidden;
+    }
+
+    .crown-icon {
+      position: absolute;
+      top: -26px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.4rem;
+      text-shadow: 0 0 10px rgba(250, 204, 21, 0.9);
+    }
+
+    .winner-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .popup-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 6px;
+      color: #fef9c3;
+    }
+
+    .popup-sub {
+      font-size: 0.9rem;
+      margin-top: 4px;
+      opacity: 0.9;
+    }
+
+    .popup-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .popup-accept-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22c55e, #4ade80);
+      color: #052e16;
+      box-shadow: 0 6px 15px rgba(22, 163, 74, 0.6);
+    }
+
+    .popup-accept-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .popup-cancel-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #f9fafb;
+      box-shadow: 0 6px 15px rgba(239, 68, 68, 0.6);
+    }
+
+    .popup-cancel-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .celebration {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 200;
+      display: none;
+    }
+
+    .celebration.show {
+      display: block;
+    }
+
+    #fireworksCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .password-popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 350;
+    }
+
+    .password-dialog {
+      background: radial-gradient(circle at top, #1e293b, #020617);
+      border-radius: 18px;
+      padding: 18px 20px;
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(250, 204, 21, 0.8);
+      width: 260px;
+      text-align: center;
+    }
+
+    .password-title {
+      font-size: 0.95rem;
+      color: #facc15;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: #020617;
+      color: #f9fafb;
+      margin-bottom: 10px;
+      outline: none;
+      font-size: 0.9rem;
+    }
+
+    .password-input:focus {
+      border-color: #facc15;
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.5);
+    }
+
+    .password-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    @media (max-width: 1100px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .spin-box {
+        max-width: 100%;
+      }
+    }
+
+    /* ===== HORSES (giữ nguyên của bạn) ===== */
+    .horse-3d {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 110px;
+      height: 90px;
+      display: grid;
+      place-items: center;
+      z-index: 3;
+      pointer-events: none;
+      filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.55));
+    }
+
+    .horse-3d.left {
+      left: 16px;
+    }
+
+    .horse-3d.right {
+      right: 16px;
+    }
+
+    .horse-3d .horse {
+      font-size: 60px;
+      transform-style: preserve-3d;
+      text-shadow:
+        0 2px 0 rgba(255, 255, 255, 0.15),
+        0 10px 18px rgba(0, 0, 0, 0.55);
+      animation: horseBob 1.8s ease-in-out infinite;
+    }
+
+    .horse-3d.left .horse {
+      transform: perspective(900px) rotateY(180deg) rotateX(10deg);
+    }
+
+    .horse-3d.right .horse {
+      transform: perspective(900px) rotateY(0deg) rotateX(10deg);
+    }
+
+    .horse-3d.left {
+      animation: horseLeftMove 4.2s ease-in-out infinite;
+    }
+
+    .horse-3d.right {
+      animation: horseRightMove 4.2s ease-in-out infinite;
+    }
+
+    @keyframes horseLeftMove {
+      0% {
+        transform: translateY(-50%) translateX(0);
+      }
+
+      50% {
+        transform: translateY(-50%) translateX(1208px);
+      }
+
+      100% {
+        transform: translateY(-50%) translateX(0);
+      }
+    }
+
+    @keyframes horseRightMove {
+      0% {
+        transform: translateY(-50%) translateX(0);
+      }
+
+      50% {
+        transform: translateY(-50%) translateX(-1280px);
+      }
+
+      100% {
+        transform: translateY(-50%) translateX(0);
+      }
+    }
+
+    @keyframes horseBob {
+
+      0%,
+      100% {
+        translate: 0 -2px;
+        rotate: -2deg;
+      }
+
+      50% {
+        translate: 0 5px;
+        rotate: 2deg;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .horse-3d {
+        width: 80px;
+        height: 70px;
+      }
+
+      .horse-3d .horse {
+        font-size: 44px;
+      }
+
+      @keyframes horseLeftMove {
+        0% {
+          transform: translateY(-50%) translateX(0);
+        }
+
+        50% {
+          transform: translateY(-50%) translateX(70px);
+        }
+
+        100% {
+          transform: translateY(-50%) translateX(0);
+        }
+      }
+
+      @keyframes horseRightMove {
+        0% {
+          transform: translateY(-50%) translateX(0);
+        }
+
+        50% {
+          transform: translateY(-50%) translateX(-70px);
+        }
+
+        100% {
+          transform: translateY(-50%) translateX(0);
+        }
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ✅ HOÀNH TRÁNG: spotlight layer -->
+  <div class="spotlight-layer" aria-hidden="true">
+    <div class="spotlight beam1"></div>
+    <div class="spotlight beam2"></div>
+    <div class="spotlight beam3"></div>
+  </div>
+
+  <audio id="lotteryMusic" src="./Vongquaymayman/music-lottery.mp3" preload="auto" loop></audio>
+  <audio id="awardMusic" preload="auto"></audio>
+
+  <!-- ✅ SFX click (bạn đặt file click.mp3 vào thư mục Vongquaymayman) -->
+  <audio id="uiClick" src="./Vongquaymayman/click.mp3" preload="auto"></audio>
+
+  <button id="chooseAwardBtn" class="award-btn">Nhạc vinh danh</button>
+
+  <div class="page">
+    <header id="mainHeader">
+      <!-- sparkle layer -->
+      <div class="sparkle-in" aria-hidden="true"></div>
+
+      <!-- NGỰA 3D TRÁI
+      <div class="horse-3d left"><div class="horse">🐎</div></div>
+       NGỰA 3D PHẢI 
+      <div class="horse-3d right"><div class="horse">🐎</div></div> -->
+
+      <div class="header-main">
+        <h1>GALA TẤT NIÊN JBD-PD</h1>
+        <p>Vòng quay may mắn - Cùng nhau bùng nổ giải thưởng!</p>
+      </div>
+
+      <div class="header-logos">
+        <div class="header-logo-card">
+          <img src="./Vongquaymayman/logo.jpg" alt="Ubee" class="header-logo-img" />
+        </div>
+        <div class="header-logo-card">
+          <img src="./Vongquaymayman/Nokia-Logo.jpg" alt="Nokia" class="header-logo-img" />
+        </div>
+        <div class="header-logo-card">
+          <img src="./Vongquaymayman/Sagemcom-Logo.png" alt="Sagemcom" class="header-logo-img" />
+        </div>
+      </div>
+
+      <!-- ✅ ticker chạy chữ -->
+      <div class="marquee">
+        <div class="marquee-track">🎉 Chào mừng GALA Tất Niên • Chúc anh chị em sức khỏe – bình an • Quay thưởng bắt
+          đầu! 🎉</div>
+      </div>
+    </header>
+
+    <div class="main-layout">
+      <!-- Cơ cấu giải thưởng (bên TRÁI) -->
+      <div class="card compact">
+        <div class="card-title">Cơ cấu giải thưởng</div>
+        <div class="sub-text">Chọn loại giải, sau đó quay thưởng để tìm ra gương mặt may mắn.</div>
+        <div id="prizeButtons" class="prize-buttons"></div>
+        <div id="prizeConfigPanel" class="prize-config-panel"></div>
+        <div id="currentPrizeLabel" class="current-prize-label">Chưa chọn giải.</div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button id="unlockPrizeBtn" class="btn btn-secondary" type="button">Nhập mật khẩu</button>
+          <button id="clearBtn" class="btn btn-secondary" type="button">Clear giải</button>
+        </div>
+      </div>
+
+      <!-- Vòng quay may mắn (GIỮA) -->
+      <div class="card compact">
+        <div class="card-title">Vòng quay may mắn</div>
+        <div class="sub-text">Mỗi nhân viên chỉ có thể trúng một lần trong chương trình.</div>
+        <div class="spin-wrapper">
+          <div id="spinBox" class="spin-box">
+            <div class="spin-label">Đang quay</div>
+            <div id="spinCode" class="spin-code">---</div>
+            <div id="spinName" class="spin-name">Nhấn "Quay thưởng" để bắt đầu</div>
+          </div>
+          <button id="rollBtn" class="btn" type="button">Quay thưởng</button>
+        </div>
+        <div class="current-winner-box">
+          <div class="title">Người trúng gần nhất:</div>
+          <div><span class="current-winner-code" id="lastWinnerCode">---</span></div>
+          <div><span class="current-winner-name" id="lastWinnerName">Chưa có kết quả</span></div>
+          <div style="font-size:0.8rem;margin-top:4px;">
+            Giải: <span id="lastWinnerPrize">---</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danh sách trúng thưởng (bên PHẢI) -->
+      <div class="card">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-header-title">Danh sách trúng thưởng</div>
+            <div class="badge" id="winnerCountBadge">0 người</div>
+          </div>
+
+          <div style="max-height:520px;overflow:auto;border-radius:10px;border:1px solid rgba(51,65,85,0.9);">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:50px;">STT</th>
+                  <th style="width:80px;">Mã thẻ</th>
+                  <th>Họ tên</th>
+                  <th style="width:120px;">Giải</th>
+                  <th style="width:120px;">Bộ phận</th>
+                </tr>
+              </thead>
+              <tbody id="winnerTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="winners-section">
+      <div class="card">
+        <div class="winners-card-title-row"
+          style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+          <div class="table-header-title">Danh sách nhân viên (chưa trúng)</div>
+          <div class="badge" id="empCountBadge">0 nhân viên</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;">
+          <div class="sub-text">Nhập <strong>Mã NV</strong> để tìm tên của mình.</div>
+          <input id="searchInput" class="search-input" placeholder="Nhập mã NV..." />
+        </div>
+
+        <div style="max-height:260px;overflow:auto;border-radius:10px;border:1px solid rgba(51,65,85,0.9);">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:50px;">STT</th>
+                <th style="width:120px;">Mã NV</th>
+                <th>Họ tên</th>
+                <th style="width:120px;">Bộ phận</th>
+              </tr>
+            </thead>
+            <tbody id="empTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <img src="./Vongquaymayman/cty.jpg" alt="Decor trái" />
+      FUYU PRECISION COMPONENT CO., LTD — Vòng quay may mắn - Liên hoan cuối năm
+      <img src="./Vongquaymayman/cty_2.jpg" alt="Decor phải" />
+    </footer>
+
+    <div style="text-align:center;margin-top:8px;font-weight:600;font-size:0.8rem;opacity:0.85;">
+      © 2025 — Web được phát triển bởi <strong>IT SFC</strong>
+    </div>
+  </div>
+
+  <div id="passwordPopup" class="password-popup">
+    <div class="password-dialog">
+      <div class="password-title">NHẬP MẬT KHẨU</div>
+      <input id="passwordInput" class="password-input" type="password" placeholder="Mật khẩu..." />
+      <div class="password-actions">
+        <button id="passwordOkBtn" class="btn" type="button">Xác nhận</button>
+        <button id="passwordCancelBtn" class="btn btn-secondary" type="button">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="celebration" class="celebration">
+    <canvas id="fireworksCanvas"></canvas>
+  </div>
+
+  <div id="winnerPopup" class="winner-popup">
+    <div class="popup-card">
+      <div class="popup-title">CHÚC MỪNG</div>
+      <div class="crown-frame">
+        <div class="crown-icon">👑</div>
+        <img id="winnerAvatar" class="winner-avatar" alt="Avatar người trúng" />
+      </div>
+      <div id="popupWinnerName" class="popup-name">---</div>
+      <div class="popup-sub">Ngôi sao của vòng quay này!</div>
+      <div class="popup-actions">
+        <button id="acceptPopupBtn" class="popup-accept-btn">Nhận</button>
+        <button id="cancelPopupBtn" class="popup-cancel-btn">Vắng Mặt</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== CẤU HÌNH & DỮ LIỆU ======
+    const STORAGE_EMPLOYEES = "employeesData";
+    const STORAGE_EMPLOYEES_ORIG = "employeesDataOriginal";
+    const STORAGE_WINNERS = "winnersData";
+    const STORAGE_PRIZE_CFG = "prizeConfig";
+
+    const CONFIG_PASSWORD = "1"; //Foxconn168!!
+
+    const awardBasePath = "./Vongquaymayman/";
+    const awardTracks = ["award1.mp3", "award2.mp3", "award3.mp3"];
+    let currentAwardIndex = 0;
+
+    const PRIZE_TYPES = [
+      { id: "luck", label: "May mắn", defaultQty: 30 },
+      { id: "encourage", label: "Giải Tư", defaultQty: 20 },
+      { id: "third", label: "Giải ba", defaultQty: 10 },
+      { id: "second", label: "Giải nhì", defaultQty: 5 },
+      { id: "first", label: "Giải nhất", defaultQty: 3 },
+      { id: "special", label: "Đặc biệt", defaultQty: 1 }
+    ];
+
+    function prizeLabelById(id) {
+      const p = PRIZE_TYPES.find((x) => x.id === id);
+      return p ? p.label : id;
+    }
+
+    let employees = [];
+    let winners = [];
+    let prizeConfig = {};
+    let currentPrizeId = null;
+    let prizeEditEnabled = false;
+
+    // ====== DOM ======
+    const chooseAwardBtn = document.getElementById("chooseAwardBtn");
+    const lotteryMusic = document.getElementById("lotteryMusic");
+    const awardMusic = document.getElementById("awardMusic");
+
+    const uiClick = document.getElementById("uiClick");
+    function playClick() {
+      try { uiClick.currentTime = 0; uiClick.play().catch(() => { }); } catch (e) { }
+    }
+
+    const prizeButtonsEl = document.getElementById("prizeButtons");
+    const prizeConfigPanel = document.getElementById("prizeConfigPanel");
+    const unlockPrizeBtn = document.getElementById("unlockPrizeBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const passwordPopup = document.getElementById("passwordPopup");
+    const passwordInput = document.getElementById("passwordInput");
+    const passwordOkBtn = document.getElementById("passwordOkBtn");
+    const passwordCancelBtn = document.getElementById("passwordCancelBtn");
+
+    const rollBtn = document.getElementById("rollBtn");
+    const currentPrizeLabelEl = document.getElementById("currentPrizeLabel");
+
+    const empTableBody = document.getElementById("empTableBody");
+    const empCountBadge = document.getElementById("empCountBadge");
+    const searchInput = document.getElementById("searchInput");
+
+    const winnerTableBody = document.getElementById("winnerTableBody");
+    const winnerCountBadge = document.getElementById("winnerCountBadge");
+    const tableHeaderTitle = document.querySelector('.table-header-title');
+
+    const lastWinnerCodeEl = document.getElementById("lastWinnerCode");
+    const lastWinnerNameEl = document.getElementById("lastWinnerName");
+    const lastWinnerPrizeEl = document.getElementById("lastWinnerPrize");
+
+    const winnerPopup = document.getElementById("winnerPopup");
+    const winnerAvatar = document.getElementById("winnerAvatar");
+    const popupWinnerName = document.getElementById("popupWinnerName");
+    const acceptPopupBtn = document.getElementById("acceptPopupBtn");
+    const cancelPopupBtn = document.getElementById("cancelPopupBtn");
+
+    const celebrationLayer = document.getElementById("celebration");
+    const fireworksCanvas = document.getElementById("fireworksCanvas");
+    const fwCtx = fireworksCanvas.getContext("2d");
+
+    const spinBox = document.getElementById("spinBox");
+    const spinCodeEl = document.getElementById("spinCode");
+    const spinNameEl = document.getElementById("spinName");
+
+    // ✅ click sound cho các nút chính (chỉ thêm)
+    ["rollBtn", "acceptPopupBtn", "cancelPopupBtn", "unlockPrizeBtn", "clearBtn"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("click", playClick);
+    });
+
+    // ✅ HOÀNH TRÁNG: mini confetti khi đổi nhạc vinh danh (chỉ thêm)
+    function miniConfetti() {
+      const n = 22;
+      for (let i = 0; i < n; i++) {
+        const p = document.createElement("div");
+        p.style.cssText = `
+          position:fixed;
+          top:60px; right:30px;
+          width:${6 + Math.random() * 7}px; height:${8 + Math.random() * 12}px;
+          background:hsl(${Math.random() * 360},100%,60%);
+          border-radius:2px;
+          z-index:9999;
+          transform:translate(0,0) rotate(${Math.random() * 180}deg);
+          opacity:.95;
+          pointer-events:none;
+        `;
+        document.body.appendChild(p);
+
+        const dx = (Math.random() * 260 - 130);
+        const dy = (Math.random() * 210 + 90);
+        p.animate([
+          { transform: `translate(0,0) rotate(0deg)`, opacity: 1 },
+          { transform: `translate(${dx}px, ${dy}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 0 }
+        ], { duration: 950 + Math.random() * 650, easing: "cubic-bezier(.2,.8,.2,1)" });
+
+        setTimeout(() => p.remove(), 1900);
+      }
+    }
+
+    // ✅ HOÀNH TRÁNG: parallax nhẹ cho header theo chuột (chỉ thêm)
+    const headerEl = document.getElementById("mainHeader");
+    let rafId = null;
+    let targetX = 0, targetY = 0, curX = 0, curY = 0;
+
+    function onMove(e) {
+      const rect = headerEl.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / rect.width;
+      const dy = (e.clientY - cy) / rect.height;
+      targetX = Math.max(-1, Math.min(1, dx));
+      targetY = Math.max(-1, Math.min(1, dy));
+
+      if (!rafId) rafId = requestAnimationFrame(tickParallax);
+    }
+    function tickParallax() {
+      curX += (targetX - curX) * 0.12;
+      curY += (targetY - curY) * 0.12;
+      headerEl.style.transform = `translateY(-1px) perspective(900px) rotateY(${curX * 6}deg) rotateX(${(-curY * 5)}deg)`;
+      rafId = requestAnimationFrame(tickParallax);
+    }
+    function onLeave() {
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      headerEl.style.transform = '';
+      targetX = targetY = curX = curY = 0;
+    }
+    headerEl.addEventListener("mousemove", onMove);
+    headerEl.addEventListener("mouseleave", onLeave);
+
+    let fwWidth = 0, fwHeight = 0;
+    let fireworksArr = [];
+    let particlesArr = [];
+    let fwRunning = false;
+    let fwAnimationId = null;
+    let lastSpawn = 0;
+
+    // ====== THÔNG BÁO ======
+    function showNotification(message, type = 'info') {
+      const old = document.getElementById("toast_notify");
+      if (old) old.remove();
+
+      const notification = document.createElement('div');
+      notification.id = "toast_notify";
+      notification.style.cssText = `
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+        color: white;
+        font-weight: bold;
+        ${type === 'success' ? 'background: linear-gradient(135deg, #22c55e, #10b981);' : ''}
+        ${type === 'error' ? 'background: linear-gradient(135deg, #ef4444, #dc2626);' : ''}
+        ${type === 'info' ? 'background: linear-gradient(135deg, #3b82f6, #1d4ed8);' : ''}
+      `;
+      const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+      notification.textContent = `${icon} ${message}`;
+
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        if (notification.parentNode) notification.remove();
+      }, 3000);
+    }
+
+    // ====== STORAGE ======
+    function loadEmployees() {
+      const raw = localStorage.getItem(STORAGE_EMPLOYEES);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            employees = parsed.map(e => ({
+              code: (e.code || "").toString(),
+              name: (e.name || "").toString(),
+              dept: (e.dept || "").toString()
+            }));
+          }
+        } catch (e) {
+          console.error("Lỗi parse employeesData:", e);
+        }
+      }
+    }
+
+    function saveEmployees() {
+      localStorage.setItem(STORAGE_EMPLOYEES, JSON.stringify(employees));
+    }
+
+    function backupEmployeesOriginalIfNeeded() {
+      if (!employees.length) return;
+      if (!localStorage.getItem(STORAGE_EMPLOYEES_ORIG)) {
+        try {
+          localStorage.setItem(STORAGE_EMPLOYEES_ORIG, JSON.stringify(employees));
+        } catch (e) {
+          console.error("Không lưu được employeesDataOriginal:", e);
+        }
+      }
+    }
+
+    function loadEmployeesOriginalToCurrent() {
+      const raw = localStorage.getItem(STORAGE_EMPLOYEES_ORIG);
+      employees = [];
+      if (!raw) return;
+      try {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) {
+          employees = arr.map((e) => ({
+            code: (e.code || "").toString(),
+            name: (e.name || "").toString(),
+            dept: (e.dept || "").toString()
+          }));
+        }
+      } catch (e) {
+        console.error("Lỗi parse employeesDataOriginal:", e);
+      }
+    }
+
+    function loadWinners() {
+      const raw = localStorage.getItem(STORAGE_WINNERS);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            winners = parsed.map(w => ({
+              code: (w.code || "").toString(),
+              name: (w.name || "").toString(),
+              dept: (w.dept || "").toString(),
+              prizeId: (w.prizeId || "").toString(),
+              time: (w.time || "").toString()
+            }));
+          }
+        } catch (e) {
+          console.error("Lỗi parse winnersData:", e);
+        }
+      }
+    }
+
+    function saveWinners() {
+      localStorage.setItem(STORAGE_WINNERS, JSON.stringify(winners));
+    }
+
+    function loadPrizeConfig() {
+      const raw = localStorage.getItem(STORAGE_PRIZE_CFG);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") prizeConfig = parsed;
+        } catch (e) {
+          console.error("Lỗi parse prizeConfig:", e);
+        }
+      }
+      PRIZE_TYPES.forEach((p) => {
+        if (typeof prizeConfig[p.id] !== "number") {
+          prizeConfig[p.id] = p.defaultQty;
+        }
+      });
+    }
+
+    function savePrizeConfig() {
+      localStorage.setItem(STORAGE_PRIZE_CFG, JSON.stringify(prizeConfig));
+    }
+
+    function syncEmployeesWithWinners() {
+      if (!winners.length) return;
+      const set = new Set(winners.map((w) => w.code));
+      employees = employees.filter((e) => !set.has(e.code));
+    }
+
+    // ====== NHẠC ======
+    function setAwardTrack(index) {
+      if (!awardTracks.length) return;
+      currentAwardIndex = ((index % awardTracks.length) + awardTracks.length) % awardTracks.length;
+      awardMusic.src = awardBasePath + awardTracks[currentAwardIndex];
+    }
+
+    function playLotteryMusic() {
+      try { awardMusic.pause(); } catch (e) { }
+      try { lotteryMusic.currentTime = 0; lotteryMusic.play().catch(() => { }); } catch (e) { }
+    }
+
+    function stopLotteryMusic() {
+      try { lotteryMusic.pause(); lotteryMusic.currentTime = 0; } catch (e) { }
+    }
+
+    function playAwardMusic() {
+      if (!awardMusic.src) setAwardTrack(currentAwardIndex);
+      try { awardMusic.currentTime = 0; awardMusic.play().catch(() => { }); } catch (e) { }
+    }
+
+    chooseAwardBtn.addEventListener("click", () => {
+      currentAwardIndex = (currentAwardIndex + 1) % awardTracks.length;
+      setAwardTrack(currentAwardIndex);
+      playAwardMusic();
+      miniConfetti(); // ✅ thêm hoành tráng
+    });
+
+    // ====== PRIZE UI ======
+    function getPrizeStats(prizeId) {
+      const total = prizeConfig[prizeId] ?? 0;
+      const used = winners.filter((w) => w.prizeId === prizeId).length;
+      const remaining = Math.max(0, total - used);
+      return { total, used, remaining };
+    }
+
+    function renderPrizeButtons() {
+      prizeButtonsEl.innerHTML = "";
+      PRIZE_TYPES.forEach((p) => {
+        const stats = getPrizeStats(p.id);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "prize-btn";
+        btn.dataset.prizeId = p.id;
+        btn.innerHTML = `<span>${p.label}</span><span class="count">(${stats.used}/${stats.total})</span>`;
+        if (p.id === currentPrizeId) btn.classList.add("active");
+
+        btn.addEventListener("click", () => {
+          if (btn.classList.contains("active")) {
+            currentPrizeId = null;
+            btn.classList.remove("active");
+          } else {
+            document.querySelectorAll(".prize-btn").forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentPrizeId = p.id;
+          }
+          updateCurrentPrizeLabel();
+          renderWinnersTable();
+        });
+
+        prizeButtonsEl.appendChild(btn);
+      });
+    }
+
+    function renderPrizeConfigPanel() {
+      prizeConfigPanel.innerHTML = "";
+      PRIZE_TYPES.forEach((p) => {
+        const stats = getPrizeStats(p.id);
+        const row = document.createElement("div");
+        row.className = "prize-config-row";
+
+        const label = document.createElement("label");
+        label.textContent = p.label;
+        row.appendChild(label);
+
+        if (!prizeEditEnabled) {
+          const statWrap = document.createElement("div");
+          statWrap.className = "prize-stats";
+
+          const pillTotal = document.createElement("span");
+          pillTotal.className = "prize-pill total";
+          pillTotal.textContent = `Tổng: ${prizeConfig[p.id]}`;
+
+          const pillUsed = document.createElement("span");
+          pillUsed.className = "prize-pill used";
+          pillUsed.textContent = `Đã trao: ${stats.used}`;
+
+          const pillRemain = document.createElement("span");
+          pillRemain.className = "prize-pill remaining";
+          pillRemain.textContent = `Còn: ${stats.remaining}`;
+
+          statWrap.appendChild(pillTotal);
+          statWrap.appendChild(pillUsed);
+          statWrap.appendChild(pillRemain);
+          row.appendChild(statWrap);
+        } else {
+          const input = document.createElement("input");
+          input.type = "number";
+          input.min = "0";
+          input.value = prizeConfig[p.id] ?? p.defaultQty;
+          input.addEventListener("change", () => {
+            let v = parseInt(input.value, 10);
+            if (isNaN(v) || v < 0) v = 0;
+            prizeConfig[p.id] = v;
+            savePrizeConfig();
+            renderPrizeButtons();
+            renderPrizeConfigPanel();
+            updateCurrentPrizeLabel();
+          });
+
+          const statWrap = document.createElement("div");
+          statWrap.className = "prize-stats";
+
+          const pillUsed = document.createElement("span");
+          pillUsed.className = "prize-pill used";
+          pillUsed.textContent = `Đã: ${stats.used}`;
+
+          const pillRemain = document.createElement("span");
+          pillRemain.className = "prize-pill remaining";
+          pillRemain.textContent = `Còn: ${stats.remaining}`;
+
+          statWrap.appendChild(pillUsed);
+          statWrap.appendChild(pillRemain);
+
+          row.appendChild(input);
+          row.appendChild(statWrap);
+        }
+
+        prizeConfigPanel.appendChild(row);
+      });
+    }
+
+    function updateCurrentPrizeLabel() {
+      if (!currentPrizeId) {
+        currentPrizeLabelEl.textContent = "Đang xem tất cả giải.";
+        return;
+      }
+      const stats = getPrizeStats(currentPrizeId);
+      currentPrizeLabelEl.textContent = `Đang chọn: ${prizeLabelById(currentPrizeId)} (Còn: ${stats.remaining}/${stats.total})`;
+    }
+
+    // ====== TABLES ======
+    function renderEmployeesTable() {
+      empTableBody.innerHTML = "";
+      const keyword = (searchInput.value || "").trim().toUpperCase();
+
+      let filtered = employees;
+      if (keyword) {
+        filtered = employees.filter((e) => (e.code || "").toUpperCase().includes(keyword));
+      }
+
+      filtered.forEach((emp, idx) => {
+        const tr = document.createElement("tr");
+
+        const tdIndex = document.createElement("td");
+        tdIndex.textContent = idx + 1;
+
+        const tdCode = document.createElement("td");
+        tdCode.textContent = emp.code;
+        tdCode.className = "code-cell";
+
+        const tdName = document.createElement("td");
+        tdName.textContent = emp.name;
+
+        const tdDept = document.createElement("td");
+        tdDept.textContent = emp.dept || "";
+
+        tr.appendChild(tdIndex);
+        tr.appendChild(tdCode);
+        tr.appendChild(tdName);
+        tr.appendChild(tdDept);
+
+        empTableBody.appendChild(tr);
+      });
+
+      empCountBadge.textContent = `${employees.length} nhân viên`;
+    }
+
+    function getPrizeRank(prizeId) {
+      switch (prizeId) {
+        case "special": return 0;
+        case "first": return 1;
+        case "second": return 2;
+        case "third": return 3;
+        case "encourage": return 4;
+        case "luck": return 5;
+        default: return 999;
+      }
+    }
+
+    function renderWinnersTable() {
+      let title = 'DANH SÁCH TRÚNG THƯỞNG';
+      if (currentPrizeId) title = `DANH SÁCH TRÚNG ${prizeLabelById(currentPrizeId).toUpperCase()}`;
+      tableHeaderTitle.textContent = title;
+
+      winnerTableBody.innerHTML = "";
+
+      let filtered = [...winners];
+      if (currentPrizeId) filtered = filtered.filter((w) => w.prizeId === currentPrizeId);
+
+      const sorted = filtered.sort((a, b) => {
+        const ra = getPrizeRank(a.prizeId);
+        const rb = getPrizeRank(b.prizeId);
+        if (ra !== rb) return ra - rb;
+        const ta = a.time || "";
+        const tb = b.time || "";
+        return ta.localeCompare(tb);
+      });
+
+      sorted.forEach((w, idx) => {
+        const tr = document.createElement("tr");
+
+        const tdIndex = document.createElement("td");
+        tdIndex.textContent = idx + 1;
+
+        const tdCode = document.createElement("td");
+        tdCode.textContent = w.code;
+        tdCode.className = "code-cell";
+
+        const tdName = document.createElement("td");
+        tdName.textContent = w.name;
+
+        const tdPrize = document.createElement("td");
+        tdPrize.textContent = prizeLabelById(w.prizeId);
+        tdPrize.className = "prize-cell";
+
+        const tdDept = document.createElement("td");
+        tdDept.textContent = w.dept || "";
+
+        tr.appendChild(tdIndex);
+        tr.appendChild(tdCode);
+        tr.appendChild(tdName);
+        tr.appendChild(tdPrize);
+        tr.appendChild(tdDept);
+
+        winnerTableBody.appendChild(tr);
+      });
+
+      winnerCountBadge.textContent = `${sorted.length} người`;
+    }
+
+    // ====== AVATAR HELPER (popup) ======
+    function loadAvatarForCode(imgEl, code) {
+      const possibleExts = ["jpg", "jpeg", "png", "webp", "gif"];
+      let triedIndex = 0;
+
+      imgEl.style.display = "none";
+      imgEl.removeAttribute("src");
+
+      function tryNext() {
+        if (triedIndex >= possibleExts.length) {
+          imgEl.removeAttribute("src");
+          imgEl.style.display = "none";
+          return;
+        }
+        const ext = possibleExts[triedIndex];
+        const url = `./Vongquaymayman/avatars/${code}.${ext}?ts=${Date.now()}`;
+
+        imgEl.onload = function () { imgEl.style.display = "block"; };
+        imgEl.onerror = function () { triedIndex++; tryNext(); };
+        imgEl.src = url;
+      }
+
+      tryNext();
+    }
+
+    // ====== POPUP ======
+    let pendingWinner = null;
+    let pendingWinnerIndex = null;
+
+    function showWinnerPopup(winner) {
+      popupWinnerName.textContent = `${winner.code} - ${winner.name}`;
+      loadAvatarForCode(winnerAvatar, winner.code);
+      winnerPopup.classList.add("show");
+    }
+
+    function hideWinnerPopup() {
+      winnerPopup.classList.remove("show");
+      stopCelebration();
+      try { awardMusic.pause(); awardMusic.currentTime = 0; } catch (e) { }
+    }
+
+    function confirmWinner() {
+      if (!pendingWinner || pendingWinnerIndex === -1 || pendingWinnerIndex === null) return;
+
+      lastWinnerCodeEl.textContent = pendingWinner.code;
+      lastWinnerNameEl.textContent = pendingWinner.name;
+      lastWinnerPrizeEl.textContent = prizeLabelById(currentPrizeId);
+
+      winners.push({
+        code: pendingWinner.code,
+        name: pendingWinner.name,
+        dept: pendingWinner.dept || "",
+        prizeId: currentPrizeId,
+        time: new Date().toISOString()
+      });
+
+      employees.splice(pendingWinnerIndex, 1); // giờ sẽ xóa đúng người
+
+      saveEmployees();
+      saveWinners();
+
+      renderEmployeesTable();
+      renderWinnersTable();
+      renderPrizeButtons();
+      renderPrizeConfigPanel();
+      updateCurrentPrizeLabel();
+
+      hideWinnerPopup();
+      pendingWinner = null;
+      pendingWinnerIndex = null;
+    }
+
+    // function confirmWinner() { //xóa random
+    //   if (!pendingWinner) return;
+
+    //   lastWinnerCodeEl.textContent = pendingWinner.code;
+    //   lastWinnerNameEl.textContent = pendingWinner.name;
+    //   lastWinnerPrizeEl.textContent = prizeLabelById(currentPrizeId);
+
+    //   winners.push({
+    //     code: pendingWinner.code,
+    //     name: pendingWinner.name,
+    //     dept: pendingWinner.dept || "",
+    //     prizeId: currentPrizeId,
+    //     time: new Date().toISOString()
+    //   });
+
+    //   employees.splice(pendingWinnerIndex, 1);
+
+    //   saveEmployees();
+    //   saveWinners();
+
+    //   renderEmployeesTable();
+    //   renderWinnersTable();
+    //   renderPrizeButtons();
+    //   renderPrizeConfigPanel();
+    //   updateCurrentPrizeLabel();
+
+    //   hideWinnerPopup();
+    //   pendingWinner = null;
+    //   pendingWinnerIndex = null;
+    // }
+
+    function cancelWinner() {
+      hideWinnerPopup();
+      pendingWinner = null;
+      pendingWinnerIndex = null;
+    }
+
+    acceptPopupBtn.addEventListener("click", confirmWinner);
+    cancelPopupBtn.addEventListener("click", cancelWinner);
+    winnerPopup.addEventListener("click", (e) => { if (e.target === winnerPopup) cancelWinner(); });
+
+    // ====== FIREWORKS ======
+    function resizeFireworks() {
+      fwWidth = fireworksCanvas.width = window.innerWidth;
+      fwHeight = fireworksCanvas.height = window.innerHeight;
+    }
+    resizeFireworks();
+    window.addEventListener("resize", resizeFireworks);
+
+    class Firework {
+      constructor(sx, sy, tx, ty) {
+        this.x = sx; this.y = sy; this.tx = tx; this.ty = ty;
+        const dx = tx - sx, dy = ty - sy;
+        const d = Math.sqrt(dx * dx + dy * dy) || 1;
+        this.vx = (dx / d) * (3 + Math.random() * 2);
+        this.vy = (dy / d) * (3 + Math.random() * 2);
+        this.alpha = 1;
+        this.brightness = 50 + Math.random() * 50;
+        this.trail = [];
+      }
+      update() {
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > 8) this.trail.shift();
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= 0.008;
+        const reached = (this.vy < 0 && this.y <= this.ty) || this.alpha <= 0;
+        if (reached) { createExplosion(this.tx, this.ty); return false; }
+        return true;
+      }
+      draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.strokeStyle = `hsl(${Math.random() * 360},100%,${this.brightness}%)`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const first = this.trail[0] || { x: this.x, y: this.y };
+        ctx.moveTo(first.x, first.y);
+        for (const p of this.trail) ctx.lineTo(p.x, p.y);
+        ctx.lineTo(this.x, this.y);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    class Particle {
+      constructor(x, y, hue) {
+        this.x = x; this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2 + Math.random() * 4;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.friction = 0.98;
+        this.gravity = 0.05 + Math.random() * 0.05;
+        this.alpha = 1;
+        this.decay = 0.01 + Math.random() * 0.02;
+        this.brightness = 50 + Math.random() * 30;
+        this.hue = hue;
+        this.size = 2 + Math.random() * 2;
+      }
+      update() {
+        this.vx *= this.friction;
+        this.vy *= this.friction;
+        this.vy += this.gravity;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+        return this.alpha > 0;
+      }
+      draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = `hsl(${this.hue},100%,${this.brightness}%)`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function createExplosion(x, y) {
+      const count = 40 + Math.floor(Math.random() * 40);
+      const baseHue = Math.random() * 360;
+      for (let i = 0; i < count; i++) {
+        const hue = baseHue + (Math.random() * 40 - 20);
+        particlesArr.push(new Particle(x, y, hue));
+      }
+    }
+
+    function spawnFirework() {
+      const sx = fwWidth * (0.2 + Math.random() * 0.6);
+      const sy = fwHeight + 10;
+      const tx = fwWidth * (0.1 + Math.random() * 0.8);
+      const ty = fwHeight * (0.15 + Math.random() * 0.4);
+      fireworksArr.push(new Firework(sx, sy, tx, ty));
+    }
+
+    function fireworksLoop(ts) {
+      if (!fwRunning) return;
+      if (!lastSpawn) lastSpawn = ts;
+      const delta = ts - lastSpawn;
+      if (delta > 400 + Math.random() * 400) { spawnFirework(); lastSpawn = ts; }
+
+      fwCtx.globalCompositeOperation = "destination-out";
+      fwCtx.fillStyle = "rgba(0,0,0,0.25)";
+      fwCtx.fillRect(0, 0, fwWidth, fwHeight);
+      fwCtx.globalCompositeOperation = "lighter";
+
+      fireworksArr = fireworksArr.filter((f) => { const a = f.update(); f.draw(fwCtx); return a; });
+      particlesArr = particlesArr.filter((p) => { const a = p.update(); p.draw(fwCtx); return a; });
+
+      fwAnimationId = requestAnimationFrame(fireworksLoop);
+    }
+
+    function startCelebration() {
+      if (fwRunning) return;
+      fwRunning = true;
+      celebrationLayer.classList.add("show");
+      lastSpawn = 0;
+      fireworksArr = [];
+      particlesArr = [];
+      fwAnimationId = requestAnimationFrame(fireworksLoop);
+    }
+
+    function stopCelebration() {
+      fwRunning = false;
+      if (fwAnimationId) { cancelAnimationFrame(fwAnimationId); fwAnimationId = null; }
+      fwCtx.clearRect(0, 0, fwWidth, fwHeight);
+      celebrationLayer.classList.remove("show");
+    }
+
+    //TEST
+    // ====== CẤU HÌNH ======
+    let isRolling = false;
+    let spinInterval = null;
+    let winnerList = [];          // Danh sách kết quả trúng giải
+    // let fixedWinnerCode = "";   // Mã nhân viên cố định (ví dụ "NV123"), null nếu muốn random
+    const fixedWinnersByPrize = {
+      first: ["", ""], //  người giải nhất  
+      second: ["", "", "", ""]           //  người giải nhì
+    };
+
+
+    // ====== HÀM ĐẾM SỐ NGƯỜI TRÚNG THEO GIẢI ======
+    function getWinnerCountByPrize(prizeId) {
+      return winnerList.filter(w => w.prizeId === prizeId).length;
+    }
+
+
+    // ====== HÀM QUAY VÀ CHỌN NGƯỜI TRÚNG ======
+    function rollAndPickWinner() {
+      if (prizeEditEnabled) {
+        alert("Đang mở chế độ chỉnh sửa giải.\nHãy khóa lại trước khi quay thưởng.");
+        return;
+      }
+      if (isRolling) return;
+      if (!currentPrizeId) { alert("Hãy chọn loại giải trước khi quay thưởng."); return; }
+
+      const stats = getPrizeStats(currentPrizeId);
+      if (stats.total <= 0) { alert("Giải này chưa được cấu hình số lượng."); return; }
+      if (stats.remaining <= 0) {
+        alert(`Giải ${prizeLabelById(currentPrizeId)} đã trao hết (${stats.total}/${stats.total}).`);
+        return;
+      }
+      if (employees.length === 0) { alert("Không còn nhân viên nào trong danh sách."); return; }
+
+      const fixedList = fixedWinnersByPrize[currentPrizeId] || [];
+      const currentIndex = getWinnerCountByPrize(currentPrizeId); // lượt quay thứ mấy
+
+      let fixedCode = fixedList[currentIndex];
+
+      if (fixedCode) {
+        pendingWinner = employees.find(e => e.code === fixedCode);
+        if (!pendingWinner) {
+          pendingWinner = employees[Math.floor(Math.random() * employees.length)];
+        }
+      } else {
+        // slot trống → random
+        pendingWinner = employees[Math.floor(Math.random() * employees.length)];
+      }
+
+      isRolling = true;
+      rollBtn.disabled = true;
+
+      playLotteryMusic();
+      spinBox.classList.add("spinning");
+
+      // ====== HIỆU ỨNG QUAY ======
+      spinInterval = setInterval(() => {
+        if (employees.length === 0) return;
+        const r = employees[Math.floor(Math.random() * employees.length)];
+        spinCodeEl.textContent = r.code;
+        spinNameEl.textContent = r.name;
+      }, 10);
+
+      const ROLL_DURATION = 6000; // Thời gian quay
+
+      setTimeout(() => {
+        clearInterval(spinInterval);
+        spinInterval = null;
+
+        // Hiển thị kết quả cuối cùng
+        spinCodeEl.textContent = pendingWinner.code;
+        spinNameEl.textContent = pendingWinner.name;
+
+        spinBox.classList.remove("spinning");
+
+        stopLotteryMusic();
+        playAwardMusic();
+        startCelebration();
+
+        // ====== LƯU VÀ HIỂN THỊ NGƯỜI TRÚNG ======
+        winnerList.push({
+          prizeId: currentPrizeId,
+          prizeName: prizeLabelById(currentPrizeId),
+          employee: pendingWinner
+        });
+
+        pendingWinnerIndex = employees.findIndex(e => e.code === pendingWinner.code);//xóa người trúng
+
+        showWinnerPopup(pendingWinner);
+
+        isRolling = false;
+        rollBtn.disabled = false;
+      }, ROLL_DURATION);
+    }
+
+    // ====== SỰ KIỆN ======
+    rollBtn.addEventListener("click", rollAndPickWinner);
+    spinBox.addEventListener("click", rollAndPickWinner);
+    searchInput.addEventListener("input", renderEmployeesTable);
+    //END TEST
+
+    //END TEST
+
+
+    // ====== MỞ KHÓA & CLEAR ======
+    unlockPrizeBtn.addEventListener("click", () => {
+      if (prizeEditEnabled) {
+        prizeEditEnabled = false;
+        alert("Đã khóa chỉnh sửa cơ cấu giải.");
+        unlockPrizeBtn.innerText = "Nhập mật khẩu";
+        renderPrizeConfigPanel();
+        return;
+      }
+      passwordInput.value = "";
+      passwordPopup.style.display = "flex";
+      setTimeout(() => passwordInput.focus(), 50);
+    });
+
+    passwordOkBtn.addEventListener("click", () => {
+      const pwd = passwordInput.value;
+      if (pwd === CONFIG_PASSWORD) {
+        prizeEditEnabled = true;
+        passwordPopup.style.display = "none";
+        alert("Đã mở khóa chỉnh sửa cơ cấu giải.");
+        unlockPrizeBtn.innerText = "Xác nhận";
+        renderPrizeConfigPanel();
+      } else {
+        alert("Sai mật khẩu!");
+        passwordInput.focus();
+        passwordInput.select();
+      }
+    });
+
+    passwordCancelBtn.addEventListener("click", () => { passwordPopup.style.display = "none"; });
+
+    passwordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") passwordOkBtn.click();
+      else if (e.key === "Escape") passwordPopup.style.display = "none";
+    });
+
+    function clearAllData() {
+      if (!prizeEditEnabled) { alert("Hãy nhập mật khẩu trước khi Clear giải."); return; }
+      if (!confirm("Clear toàn bộ kết quả và reset cơ cấu giải về ban đầu?")) return;
+
+      winners = [];
+      saveWinners();
+
+      prizeConfig = {};
+      PRIZE_TYPES.forEach((p) => { prizeConfig[p.id] = p.defaultQty; });
+      savePrizeConfig();
+
+      loadEmployeesOriginalToCurrent();
+      saveEmployees();
+
+      lastWinnerCodeEl.textContent = "---";
+      lastWinnerNameEl.textContent = "Chưa có kết quả";
+      lastWinnerPrizeEl.textContent = "---";
+
+      spinCodeEl.textContent = "---";
+      spinNameEl.textContent = 'Nhấn "Quay thưởng" để bắt đầu';
+
+      currentPrizeId = null;
+
+      renderPrizeButtons();
+      renderPrizeConfigPanel();
+      updateCurrentPrizeLabel();
+      renderEmployeesTable();
+      renderWinnersTable();
+      stopCelebration();
+
+      try { lotteryMusic.pause(); awardMusic.pause(); } catch (e) { }
+
+      alert("Đã Clear toàn bộ kết quả & reset cơ cấu giải.");
+    }
+
+    clearBtn.addEventListener("click", clearAllData);
+
+    // ====== INIT ======
+    function init() {
+      loadEmployees();
+      backupEmployeesOriginalIfNeeded();
+      loadWinners();
+      loadPrizeConfig();
+
+      syncEmployeesWithWinners();
+
+      setAwardTrack(currentAwardIndex);
+
+      currentPrizeId = null;
+      renderPrizeButtons();
+      renderPrizeConfigPanel();
+      updateCurrentPrizeLabel();
+      renderEmployeesTable();
+      renderWinnersTable();
+
+      const syncFlag = localStorage.getItem('syncNeeded');
+      if (syncFlag === 'true') {
+        localStorage.removeItem('syncNeeded');
+        loadEmployees();
+        loadWinners();
+        syncEmployeesWithWinners();
+        renderEmployeesTable();
+        renderWinnersTable();
+        showNotification('Đã cập nhật dữ liệu mới từ trang quản lý!', 'success');
+      }
+    }
+
+    init();
+  </script>
+
+  <script>
+    (function () {
+      const text = "© 2025 — (IT SFC) — Bản quyền web thuộc FUYU PRECISION";
+      const id = "copyright_protection_fuyu";
+
+      function createCopyright() {
+        let el = document.getElementById(id);
+        if (!el) {
+          el = document.createElement("div");
+          el.id = id;
+          el.textContent = text;
+          el.style.position = "fixed";
+          el.style.bottom = "6px";
+          el.style.right = "6px";
+          el.style.padding = "6px 12px";
+          el.style.background = "rgba(0,0,0,0.55)";
+          el.style.color = "#fff";
+          el.style.fontSize = "12px";
+          el.style.borderRadius = "6px";
+          el.style.zIndex = "999999";
+          el.style.pointerEvents = "none";
+          document.body.appendChild(el);
+        }
+      }
+
+      createCopyright();
+
+      const observer = new MutationObserver(() => {
+        if (!document.getElementById(id)) createCopyright();
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+    })();
+  </script>
+</body>
+
+</html>
